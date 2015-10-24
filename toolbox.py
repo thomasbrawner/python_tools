@@ -11,25 +11,25 @@ def list_flatten(list_of_lists):
 
 
 def n_largest(arr, n, sorted=False):
-    '''
-    Return the indices of the n largest elements in arr. 
-    If sorted, complete sort the array and return the 
-    indices for the elements ordered least to greatest. 
-    '''
-    if sorted:
-        return np.argsort(arr)[-5:]
-    else:
+	'''
+	Return the indices of the n largest elements in arr. 
+	If sorted, complete sort the array and return the 
+	indices for the elements ordered least to greatest. 
+	'''
+	if sorted:
+		return np.argsort(arr)[-5:]
+	else:
 		return np.argpartition(arr, -n)[-n:]
 
 
 def round_down_any(arr, base):
-    '''
-    Round values of arr down to nearest base (integer)
-    '''
-    if not type(base) == int:
-    	warn('base changed to type integer')
-    	base = int(base)
-    return (arr / base) * base
+	'''
+	Round values of arr down to nearest base (integer)
+	'''
+	if not type(base) == int:
+		warn('base changed to type integer')
+		base = int(base)
+	return (arr / base) * base
 
 
 def scale_convert(arr, new_scale, round=False):
@@ -42,11 +42,12 @@ def scale_convert(arr, new_scale, round=False):
 	new_array = (((arr - arr.min()) * new_range) / old_range) + 1
 	if round:
 		return np.round(new_array)
-	return new_array
+	else:
+		return new_array
 
 
 if __name__ == '__main__':
-	
+
 	lst = [['a', 'b', 'c'], ['d', 'e', 'f', 'g']]
 	arr = np.random.randint(50, size=50)
 
