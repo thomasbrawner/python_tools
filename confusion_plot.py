@@ -1,5 +1,3 @@
-## ----------------------------------------------------------------------------------------------- ##
-## ----------------------------------------------------------------------------------------------- ##
 
 import matplotlib.pyplot as plt 
 import numpy as np 
@@ -7,7 +5,6 @@ import pandas as pd
 import seaborn as sns 
 from sklearn.metrics import confusion_matrix
 
-## ----------------------------------------------------------------------------------------------- ##
 
 def format_confusion_matrix(cmat):
 	'''
@@ -26,6 +23,7 @@ def confusion_plot(observed, predicted, norm=True, model_names=None):
 	Plot the results from multiple confusion matrices for the same observed data.
 
 	Arguments:
+	----------
 		observed: array of values of dependent variable
 		predicted: list of arrays of predicted values from models 
 		norm: should the values in the confusion matrix cells be normalized by 
@@ -34,10 +32,8 @@ def confusion_plot(observed, predicted, norm=True, model_names=None):
 			of the plot. 
 	'''
 	cmats = [confusion_matrix(observed, pred) for pred in predicted]
-	
 	if norm:
 		cmats = [cmat / cmat.sum(axis=1).astype(float) for cmat in cmats]
-	
 	cmats = [format_confusion_matrix(cmat) for cmat in cmats]
 
 	if model_names is not None:
@@ -48,18 +44,18 @@ def confusion_plot(observed, predicted, norm=True, model_names=None):
 	else:
 		for idx, cmat in zip(np.arange(len(cmats)), cmats):
 			cmat[' '] = idx
-
+	
 	cdata = pd.concat(cmats)
 
 	f, (ax0, ax1) = plt.subplots(2, sharex=True)
 	sns.barplot(x='Predicted', y='value', hue=' ', data=cdata.query('Observed == "True"'), ax=ax0)
-	ax0.set_ylabel('True', labelpad = 12); ax0.set_xlabel('')
+	ax0.set_ylabel('True', labelpad=12); ax0.set_xlabel('')
 	if norm:
 		ax0.set_ylim([0.0, 1.0])
 	else:
 		ax0.set_ylim([0.0, cdata.query('Observed == "True"')['value'].max() + 1])
 	sns.barplot(x='Predicted', y='value', hue=' ', data=cdata.query('Observed == "False"'), ax=ax1)
-	ax1.set_ylabel('False', labelpad = 12); ax1.set_xlabel('Predicted', labelpad = 12)
+	ax1.set_ylabel('False', labelpad=12); ax1.set_xlabel('Predicted', labelpad=12)
 	if norm:
 		ax1.set_ylim([0.0, 1.0])
 	else:
@@ -67,9 +63,8 @@ def confusion_plot(observed, predicted, norm=True, model_names=None):
 	f.subplots_adjust(hspace=0.02)
 	plt.tight_layout() 
 
-## ----------------------------------------------------------------------------------------------- ##
 
-if __name__ == == "__main__":
+if __name__ == "__main__":
 
 	# fake results 
 	data = np.array([0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1])
@@ -86,6 +81,3 @@ if __name__ == == "__main__":
 	preds = [model1, model2, model3]
 	names = ['Model 1', 'Model 2', 'Model 3']
 	confusion_plot(data, preds, norm=True, model_names=names)
-
-## ----------------------------------------------------------------------------------------------- ##
-## ----------------------------------------------------------------------------------------------- ##
