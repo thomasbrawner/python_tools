@@ -9,7 +9,7 @@ import pandas as pd
 import seaborn as sns 
 
 
-def separation_plot(y_true, y_pred, alpha=0.80, fname=None):
+def separation_plot(y_true, y_pred, alpha=0.80, fname=None, show=False):
     '''
     Display observed events against predicted probabilities. 
 
@@ -36,7 +36,10 @@ def separation_plot(y_true, y_pred, alpha=0.80, fname=None):
     for i in evals:
         ax.axvline(x=i, linewidth=0.15, linestyle='-', color='r', alpha=alpha)
 
+    if show:
+        plt.show() 
+        
     if fname is not None:
         plt.savefig(fname)
         plt.close() 
-    
+
