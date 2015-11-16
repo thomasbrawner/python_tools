@@ -17,7 +17,9 @@ def separation_plot(y_true, y_pred, alpha=0.80, fname=None, show=False):
     ---------
         y_true : vector of observed class labels
         y_pred : vector of predicted probabilities
-        alpha: transparency
+        alpha: float from 0 to 1, transparency
+        fname: file path to directory to save plot 
+        show: boolean, whether to display the plot 
     '''
     pdata = pd.DataFrame([y_true, y_pred]).T
     pdata.columns = ['y', 'yhat']
@@ -38,7 +40,7 @@ def separation_plot(y_true, y_pred, alpha=0.80, fname=None, show=False):
 
     if show:
         plt.show() 
-        
+
     if fname is not None:
         plt.savefig(fname)
         plt.close() 
