@@ -18,7 +18,7 @@ def format_confusion_matrix(cmat):
 	cmat = pd.melt(cmat, id_vars='Observed')
 	return cmat 
 
-def confusion_plot(observed, predicted, norm=True, model_names=None):
+def confusion_plot(observed, predicted, norm=True, model_names=None, fname=None):
 	'''
 	Plot the results from multiple confusion matrices for the same observed data.
 
@@ -30,6 +30,7 @@ def confusion_plot(observed, predicted, norm=True, model_names=None):
 			the sum of within-class observations. Defaults to True. 
 		model_names: list of names given to the models to appear in the legend 
 			of the plot. 
+		fname: path to write file 
 	'''
 	cmats = [confusion_matrix(observed, pred) for pred in predicted]
 	if norm:
@@ -63,6 +64,12 @@ def confusion_plot(observed, predicted, norm=True, model_names=None):
 	f.subplots_adjust(hspace=0.02)
 	plt.tight_layout() 
 
+	if fname is not None: 
+		plt.savefig(fname)
+		plt.close() 
+	else: 
+		plt.show() 
+	return 
 
 if __name__ == "__main__":
 
