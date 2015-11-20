@@ -17,7 +17,7 @@ def recall_precision_auc(observed, predicted, plot=False, fname=None):
 		- observed: array of observed classes
 		- predicted: array of predicted classes 
 		- plot: boolean, plot the resulting curve 
-		- fname: path for writing plot to file 
+		- fname: path for writing plot to file, writes to file even where plot=False
 
 	Values:
 	-------
@@ -26,7 +26,7 @@ def recall_precision_auc(observed, predicted, plot=False, fname=None):
 	precision, recall, thresholds = precision_recall_curve(observed, predicted)
 	pr_auc = auc(recall, precision)
 
-	if plot:
+	if (plot or fname is not None):
 		plt.figure() 
 		plt.plot(recall, precision, linestyle='-', color='k')
 		plt.xlabel('Recall', labelpad=11); plt.ylabel('Precision', labelpad=11)
