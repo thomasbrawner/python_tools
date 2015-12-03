@@ -7,7 +7,7 @@ from sklearn.preprocessing import StandardScaler
 
 def scree_plot(pca_obj, fname=None): 
     '''
-    Scree plot for principal components analysis objects. 
+    Scree plot for variance & cumulative variance by component from PCA. 
 
     Arguments: 
         - pca_obj: a fitted sklearn PCA instance
@@ -15,11 +15,15 @@ def scree_plot(pca_obj, fname=None):
 
     Output: 
         - scree plot 
-    '''    
+    '''   
+    components = pca_obj.n_components_ 
+    variance = pca.explained_variance_ratio_
     plt.figure()
-    plt.plot(np.arange(pca_obj.n_components_ + 1), np.hstack([0, np.cumsum(pca_obj.explained_variance_ratio_)]))
-    plt.xlim([0, pca.n_components_]); plt.ylim([0.0, 1.01])
-    plt.xlabel('No. Components', labelpad=11); plt.ylabel('Cumulative Variance Explained')
+    plt.plot(np.arange(1, components + 1), np.cumsum(variance), label='Cumulative Variance')
+    plt.plot(np.arange(1, components + 1), variance, label='Variance')
+    plt.xlim([1, components]); plt.ylim([0.0, 1.01])
+    plt.xlabel('No. Components', labelpad=11); plt.ylabel('Variance Explained', labelpad=11)
+    plt.legend(loc='best') 
     plt.tight_layout() 
     if fname is not None:
         plt.savefig(fname)
