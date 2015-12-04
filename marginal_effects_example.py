@@ -22,8 +22,8 @@ def generate_data():
     Read and merge GWF data and control variables.
     Subset the data frame and format for analysis. 
     '''
-    data = pd.read_table('regime_failure/gwf.txt', sep=',')
-    data = pd.merge(data, pd.read_table('regime_failure/control_variables.txt', sep=','), on=['cowcode', 'year'], how='left')
+    data = pd.read_table('data/gwf.txt', sep=',')
+    data = pd.merge(data, pd.read_table('data/control_variables.txt', sep=','), on=['cowcode', 'year'], how='left')
     data['period'] = data['year'] // 2 * 2
     data['growth'] /= 10
     data = data[['failure', 'gdppc', 'growth', 'resource', 'population', 'period', 'region']]
@@ -96,5 +96,6 @@ if __name__ == '__main__':
     ax2.set_ylabel('Frequency')
 
     plt.tight_layout() 
-    plt.show() 
+    plt.savefig('images/marginal_effects_example.png')
+    plt.close() 
  
