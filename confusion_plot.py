@@ -1,9 +1,13 @@
-
 import matplotlib.pyplot as plt 
 import numpy as np 
 import pandas as pd 
 import seaborn as sns 
+from sklearn.cross_validation import train_test_split 
+from sklearn.datasets import make_classification
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegressionCV, RidgeClassifierCV
 from sklearn.metrics import confusion_matrix
+from sklearn.preprocessing import StandardScaler
 
 
 def format_confusion_matrix(cmat):
@@ -73,18 +77,34 @@ def confusion_plot(observed, predicted, norm=True, model_names=None, fname=None)
 
 if __name__ == "__main__":
 
-	# fake results 
-	data = np.array([0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1])
-	model1 = np.array([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0])
-	model2 = np.array([1, 0, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 0])
-	model3 = np.array([0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 1, 0, 1, 0])
+    # generate some fake data, split, and scale 
+    X, y = make_classification(n_samples=10000, n_informative=5, n_redundant=6, random_state=4)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=4)
+    scaler = StandardScaler().fit(X_train)
+    X_train_standard = scaler.transform(X_train)
+    X_test_standard = scaler.transform(X_test)
+    
+    # specify classifiers
+    ridge = RidgeClassifierCV(alphas=np.logspace(-3, 1))
+    lasso = LogisticRegressionCV(Cs=np.logspace(-3, 1))
+    forest = RandomForestClassifier(n_estimators=5000, n_jobs=-1) 
 
-	# confusion matrices
-	c1 = confusion_matrix(data, model1)
-	c2 = confusion_matrix(data, model2)
-	c3 = confusion_matrix(data, model3)
+    # train the classifiers 
+    ridge.fit(X_train_standard, y_train)
+    lasso.fit(X_train_standard, y_train)
+    forest.fit(X_train, y_train)
+   
+    # predicted values 
+    ridge_preds = ridge.predict(X_test_standard)
+    lasso_preds = lasso.predict(X_test_standard)
+    forest_preds = forest.predict(X_test)
 
-	# build a plot to compare results 
-	preds = [model1, model2, model3]
-	names = ['Model 1', 'Model 2', 'Model 3']
-	confusion_plot(data, preds, norm=True, model_names=names)
+    # confusion matrices 	
+    c1 = confusion_matrix(y_test, ridge_preds)
+    c2 = confusion_matrix(y_test, lasso_preds)
+    c3 = confusion_matrix(y_test, forest_preds)
+
+    # build a plot to compare results 
+    preds = [ridge_preds, lasso_preds, forest_preds]
+    names = ['Ridge', 'Lasso', 'Random Forest']
+    confusion_plot(y_test, preds, norm=True, model_names=names, fname='images/confusion_plot.png')
