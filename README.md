@@ -20,6 +20,12 @@ In rare events problems, we are often concerned about how well we can predict th
 
 <img src="images/precision_recall_curve.png" width="600px">
 
+####Confusion Plot 
+
+The confusion plot allows us to visualize the confusion matrix for multiple classifiers simultaneously, allowing for quick visual comparison of model performance. The example below compares the performance of ridge, lasso, and random forest classifiers on the same test data. 
+
+<img src="images/confusion_plot.png" width="600px">
+
 ####Scree Plot
 
 The scree plot shows the amount of variance explained by each of the principal components obtained from principal components analysis. The resulting plot shows cumulative variance explained alongside the variance for each component. The example below uses the Boston housing data. 
