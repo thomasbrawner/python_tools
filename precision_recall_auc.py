@@ -1,6 +1,9 @@
 import matplotlib.pyplot as plt 
 import numpy as np 
 import seaborn as sns 
+from sklearn.cross_validation import train_test_split 
+from sklearn.datasets import make_classification 
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import auc, precision_recall_curve
 
 
@@ -38,7 +41,15 @@ def recall_precision_auc(observed, predicted, fname=None):
 
 
 if __name__ == "__main__": 
-    # fake results 
-    data = np.array([0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1])
-    pred = np.array([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 1, 1, 1])
-    recall, precision, pr_auc = recall_precision_auc(data, pred, fname='images/precision_recall_curve.png')
+
+    # fake data for classification problem
+    X, y = make_classification(n_samples=10000, random_state=4)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=4)
+
+    # random forest classifier
+    forest = RandomForestClassifier(n_estimators=1000, n_jobs=-1)
+    forest.fit(X_train, y_train)
+
+    # precision-recall plot 
+    preds = forest.predict_proba(X_test)[:, 1]
+    recall, precision, pr_auc = recall_precision_auc(y_test, preds, fname='images/precision_recall_curve.png')
