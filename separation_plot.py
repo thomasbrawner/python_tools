@@ -7,6 +7,9 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns 
+from sklearn.cross_validation import train_test_split 
+from sklearn.datasets import make_classification
+from sklearn.ensemble import RandomForestClassifier
 
 
 def separation_plot(y_true, y_pred, alpha=0.80, fname=None):
@@ -44,3 +47,16 @@ def separation_plot(y_true, y_pred, alpha=0.80, fname=None):
         plt.show() 
     return 
 
+
+if __name__ == '__main__':
+
+    # generate some fake data for classification problem 
+    X, y = make_classification(n_samples=10000, n_informative=5, random_state=4) 
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.1, random_state=4) 
+    
+    # random forest classifier
+    forest = RandomForestClassifier(n_estimators=1000, n_jobs=-1)
+    forest.fit(X_train, y_train)
+    
+    # make separation plot 
+    separation_plot(y_test, forest.predict_proba(X_test)[:, 1], fname='images/separation_plot.png')
