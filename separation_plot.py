@@ -12,7 +12,7 @@ from sklearn.datasets import make_classification
 from sklearn.ensemble import RandomForestClassifier
 
 
-def separation_plot(y_true, y_pred, alpha=0.80, fname=None):
+def separation_plot(y_true, y_pred, alpha=0.80, fname):
     '''
     Display observed events against predicted probabilities. 
 
@@ -39,13 +39,8 @@ def separation_plot(y_true, y_pred, alpha=0.80, fname=None):
     ax.plot(pdata['yhat'], '-')
     for i in evals:
         ax.axvline(x=i, linewidth=0.15, linestyle='-', color='r', alpha=alpha)
-
-    if fname is not None:
-        plt.savefig(fname)
-        plt.close() 
-    else:
-        plt.show() 
-    return 
+    plt.savefig(fname)
+    plt.close() 
 
 
 if __name__ == '__main__':
